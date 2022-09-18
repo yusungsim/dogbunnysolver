@@ -22,7 +22,7 @@ Find solution by finding path from the initial state from final state.
 
 # Todos
 
-[] Modularization of the code
-[] Optimization: always find the optimal solution
-[] Better descripttion for the solution (i.e. sequence of "move sth. from sth. to sth.")
-[] Getting the puzzle information with serialized format
+[ ] Modularization of the code
+[ ] Optimization: always find the optimal solution
+[ ] Better descripttion for the solution (i.e. sequence of "move sth. from sth. to sth.")
+[ ] Getting the puzzle information with serialized format
