@@ -134,7 +134,7 @@ case class Generator(graph: Graph, validr: Validator) {
 case class Solver(check: Validator, gen: Generator){
   def apply(init: State, goal: State): List[State] = {
     val initQueue = List((init, 0))
-    val rawsol = solveWithStack(goal, initQueue, 0)
+    val rawsol = solveWithQueue(goal, initQueue, 0)
     init :: rawsol.reverse
   }
 
@@ -151,7 +151,7 @@ case class Solver(check: Validator, gen: Generator){
   }
 
   // queue-based naive solver
-  def solveWithStack(
+  def solveWithQueue(
     goal: State, 
     // list-based queue. 
     queue: List[(State, Int)], 
