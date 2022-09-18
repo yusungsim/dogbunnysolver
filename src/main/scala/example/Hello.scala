@@ -1,4 +1,5 @@
 package example
+import scala.annotation.tailrec
 
 // Abstraction of general graph
 case class Node(name: String)
@@ -102,6 +103,35 @@ case class Generator(graph: Graph, validr: Validator) {
 // solves the puzzle with Validator and Generator
 case class Solver(check: Validator, gen: Generator){
   def apply(init: State, goal: State): List[State] = ???
+
+  def backtrack(queue: List[(State, Int)], cursor: Int): List[State] = ???
+
+  // queue-based naive solver
+  def solveWithStack(
+    goal: State, 
+    // list-based queue. will be preserved for later backtracking
+    queue: List[(State, Int)], 
+    // index of head of queue. 
+    head: Int
+  ): List[State] = {
+    // pops a state, check if it's a goal state
+    queue(head) match {
+      case (curState, _) => {
+        // if curState is goal, end the search.
+        // backtrack to produce the actual trace
+        if (curState == goal) {
+          backtrack(queue, head)
+        // if curState is not a goal,
+        // generate next states and add to the queue.
+        // then continue solving with next queue element.
+        } else {
+          val nextStates = gen.genNextStates(curState)
+          val newQueue = queue ++ nextStates.map(x => (x, head))
+          solveWithStack(goal, newQueue, head+1)
+        }
+      }
+    }
+  }
 }
 
 object Main extends App {
