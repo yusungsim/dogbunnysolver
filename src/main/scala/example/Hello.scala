@@ -60,9 +60,38 @@ case class State(b1: Node, b2: Node, dog: Node) {
 
 // validates certain move is possible
 case class Validator(graph: Graph) {
-  def checkBunny1(from: Node, to: Node): Boolean = true 
-  def checkBunny2(from: Node, to: Node): Boolean = true
-  def checkDog(from: Node, to: Node): Boolean = true
+  def checkBunny1(state: State)(from: Node, to: Node): Boolean = 
+    checkMove(state)(from, to)
+  def checkBunny2(state: State)(from: Node, to: Node): Boolean =
+    checkMove(state)(from, to)
+  def checkDog(state: State)(from: Node, to: Node): Boolean =
+    checkMove(state)(from, to)
+  // true : valid, false: invalid
+  def checkMove(state: State)(from: Node, to: Node): Boolean = {
+    // hand-crafted actual rules.
+    // see the (puzzle)[http://www.dogbunnypuzzle.com/]
+    state match {
+      case State(b1, b2, dog) => {
+        val takenNodes = List(b1, b2, dog)
+        (from.name, to.name) match {
+          case ("bone", "house") | ("house", "bone") => {
+            takenNodes contains Node("carrot")
+          }
+          case ("house", "boat") | ("boat", "house") => {
+            takenNodes contains Node("tree")
+          }
+          case ("house", "tree") | ("tree", "house") => {
+            (takenNodes contains Node("bone")) && 
+            (takenNodes contains Node("flower"))
+          }
+          case ("carrot", "well") | ("well", "carrot") => {
+            !(takenNodes contains Node("bone"))
+          }
+          case _ => true
+        }
+      }
+    }
+  }
 }
 
 // generates next possible states from given state 
@@ -75,7 +104,7 @@ case class Generator(graph: Graph, validr: Validator) {
         // for connected next nodes of current bunny 1 node,
         val nextBunny1States: List[State] = 
           // filter only valid next nodes
-          nextBunny1Nodes.filter(next => validr.checkBunny1(b1, next))
+          nextBunny1Nodes.filter(next => validr.checkBunny1(state)(b1, next))
           // then genrate states that moves bunny1 to that nodes.
             .map(next => state.moveBunny1(next))
 
@@ -83,14 +112,14 @@ case class Generator(graph: Graph, validr: Validator) {
         // similar logic
         val nextBunny2Nodes = graph.getNextNodes(b2)
         val nextBunny2States: List[State] = 
-          nextBunny2Nodes.filter(next => validr.checkBunny2(b2, next))
+          nextBunny2Nodes.filter(next => validr.checkBunny2(state)(b2, next))
             .map(next => state.moveBunny2(next))
 
         // third gen moving dog
         // similar logiv
         val nextDogNodes = graph.getNextNodes(dog)
         val nextDogStates: List[State] = 
-          nextDogNodes.filter(next => validr.checkDog(dog, next))
+          nextDogNodes.filter(next => validr.checkDog(state)(dog, next))
             .map(next => state.moveDog(next))
 
         // aggregate all possible states
@@ -113,7 +142,7 @@ case class Solver(check: Validator, gen: Generator){
         if (prevId == 0) {
           List(curState)
         } else {
-          backtrack(queue, prevId) :+ curState 
+          curState :: backtrack(queue, prevId) 
         }
       }
     }
