@@ -41,9 +41,25 @@ case class Graph(nodes: List[Node], edges: Edgemap[Node]) {
   def printAll: Unit = edges.foreach(x => {print(x); print(" -> ")}, println _)
 }
 
-// abstractin of puzzle state
-case class State(bunny1: Node, bunny2: Node, dog: Node) {
+// abstraction of puzzle state
+case class State(b1: Node, b2: Node, dog: Node) {
+  def moveBunny1(n: Node): State = State(n, b2, dog)    
+  def moveBunny2(n: Node): State = State(b1, n, dog)    
+  def movedog(n: Node): State = State(b1, b2, n)    
+}
 
+// validates certain move is possible
+case class Validator(graph: Graph) {
+
+}
+
+// generates next possible states from given state 
+case class Generator(graph: Graph) {
+}
+
+// solves the puzzle with Validator and Generator
+case class Solver(check: Validator, gen: Generator){
+  def apply(init: State, goal: State): List[State] = ???
 }
 
 object Main extends App {
@@ -70,5 +86,12 @@ object Main extends App {
   val graph = Graph(nodes, Edgemap(Map.empty)).addEdges(edges) 
 
   graph.printAll
+
+  val initState = State(Node("house"), Node("boat"), Node("tree"))
+  val goalState = State(Node("carrot"), Node("carrot"), Node("bone"))
+  val validr = Validator(graph)
+  val genr = Generator(graph)
+  val solver = Solver(validr, genr)
+  val solution: List[State] = solver(initState, goalState)
 }
 
