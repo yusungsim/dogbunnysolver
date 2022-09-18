@@ -134,7 +134,8 @@ case class Generator(graph: Graph, validr: Validator) {
 case class Solver(check: Validator, gen: Generator){
   def apply(init: State, goal: State): List[State] = {
     val initQueue = List((init, 0))
-    solveWithStack(goal, initQueue, 0)
+    val rawsol = solveWithStack(goal, initQueue, 0)
+    init :: rawsol.reverse
   }
 
   def backtrack(queue: List[(State, Int)], id: Int): List[State] = {
@@ -215,6 +216,6 @@ object Main extends App {
   val solution: List[State] = solver(initState, goalState)
 
   println(">>> Solution <<<")
-  solution.reverse.foreach(_.print)
+  solution.foreach(_.print)
 }
 
