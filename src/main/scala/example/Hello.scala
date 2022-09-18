@@ -56,6 +56,7 @@ case class State(b1: Node, b2: Node, dog: Node) {
   def moveBunny1(n: Node): State = State(n, b2, dog)    
   def moveBunny2(n: Node): State = State(b1, n, dog)    
   def moveDog(n: Node): State = State(b1, b2, n)    
+  def print = println(s"Bunny1: ${b1.name} | Bunny2: ${b2.name} | Dog: ${dog.name}")
 }
 
 // validates certain move is possible
@@ -206,8 +207,6 @@ object Main extends App {
 
   val graph = Graph(nodes, Edgemap(Map.empty)).addEdges(edges) 
 
-  graph.printAll
-
   val initState = State(Node("house"), Node("boat"), Node("tree"))
   val goalState = State(Node("carrot"), Node("carrot"), Node("bone"))
   val validr = Validator(graph)
@@ -216,6 +215,6 @@ object Main extends App {
   val solution: List[State] = solver(initState, goalState)
 
   println(">>> Solution <<<")
-  solution.foreach(println _)
+  solution.reverse.foreach(_.print)
 }
 
