@@ -102,7 +102,10 @@ case class Generator(graph: Graph, validr: Validator) {
 
 // solves the puzzle with Validator and Generator
 case class Solver(check: Validator, gen: Generator){
-  def apply(init: State, goal: State): List[State] = ???
+  def apply(init: State, goal: State): List[State] = {
+    val initQueue = List((init, 0))
+    solveWithStack(goal, initQueue, 0)
+  }
 
   def backtrack(queue: List[(State, Int)], id: Int): List[State] = {
     queue(id) match {
@@ -110,7 +113,7 @@ case class Solver(check: Validator, gen: Generator){
         if (prevId == 0) {
           List(curState)
         } else {
-          curState :: backtrack(queue, prevId) 
+          backtrack(queue, prevId) :+ curState 
         }
       }
     }
@@ -182,5 +185,8 @@ object Main extends App {
   val genr = Generator(graph, validr)
   val solver = Solver(validr, genr)
   val solution: List[State] = solver(initState, goalState)
+
+  println(">>> Solution <<<")
+  solution.foreach(println _)
 }
 
