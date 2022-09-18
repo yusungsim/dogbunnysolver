@@ -9,7 +9,7 @@ Automated solver to the [Dog Bunny Puzzle](http://www.dogbunnypuzzle.com/).
 i.e. run following command from the project top directory.
 `sbt run`
 3. Interpret the solution.
-Each line in the solution describes the puzzle state.
+Each line in the solution describes the puzzle state. (i.e. where bunnies and a dog is)
 Read each line, and move bunny or dog as the line says.
 
 # Concepts
@@ -20,3 +20,9 @@ Directed edge == state transformation == a possible move from one puzzle state t
 
 Find solution by finding path from the initial state from final state.
 
+# Todos
+
+[] Modularization of the code
+[] Optimization: always find the optimal solution
+[] Better descripttion for the solution (i.e. sequence of "move sth. from sth. to sth.")
+[] Getting the puzzle information with serialized format
