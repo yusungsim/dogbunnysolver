@@ -104,12 +104,22 @@ case class Generator(graph: Graph, validr: Validator) {
 case class Solver(check: Validator, gen: Generator){
   def apply(init: State, goal: State): List[State] = ???
 
-  def backtrack(queue: List[(State, Int)], cursor: Int): List[State] = ???
+  def backtrack(queue: List[(State, Int)], id: Int): List[State] = {
+    queue(id) match {
+      case (curState, prevId) => {
+        if (prevId == 0) {
+          List(curState)
+        } else {
+          curState :: backtrack(queue, prevId) 
+        }
+      }
+    }
+  }
 
   // queue-based naive solver
   def solveWithStack(
     goal: State, 
-    // list-based queue. will be preserved for later backtracking
+    // list-based queue. 
     queue: List[(State, Int)], 
     // index of head of queue. 
     head: Int
@@ -124,10 +134,17 @@ case class Solver(check: Validator, gen: Generator){
         // if curState is not a goal,
         // generate next states and add to the queue.
         // then continue solving with next queue element.
+        // should avoid adding redundent states
         } else {
           val nextStates = gen.genNextStates(curState)
-          val newQueue = queue ++ nextStates.map(x => (x, head))
-          solveWithStack(goal, newQueue, head+1)
+          val newQueue = 
+            queue ++ nextStates
+              .filter(x => {
+                val queueOnlyStates = queue.map({ case (s, i) => s })
+                !(queueOnlyStates contains x)
+              })
+              .map(x => (x, head))
+          solveWithStack(goal, newQueue, head+1) // todo: TCO
         }
       }
     }
