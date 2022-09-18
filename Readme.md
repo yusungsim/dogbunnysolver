@@ -18,11 +18,14 @@ Node == puzzle state == a possible configuration of the dog and bunnies in the p
 
 Directed edge == state transformation == a possible move from one puzzle state to another.
 
-Find solution by finding path from the initial state from final state.
+Enumerate possible states from previous to next and reach the goal state. When goal state reached, backtrack to produce the solution trace.
 
 # Todos
 
-[ ] Modularization of the code
-[ ] Optimization: always find the optimal solution
-[ ] Better descripttion for the solution (i.e. sequence of "move sth. from sth. to sth.")
-[ ] Getting the puzzle information with serialized format
+- [ ] Modularization of the code
+
+- [ ] Optimization: always find the optimal solution
+
+- [ ] Better descripttion for the solution (i.e. sequence of "move sth. from sth. to sth.")
+
+- [ ] Getting the puzzle information with serialized format
