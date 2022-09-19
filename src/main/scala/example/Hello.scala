@@ -178,7 +178,7 @@ case class Solver(check: Validator, gen: Generator){
                 !(queueOnlyStates contains x)
               })
               .map(x => (x, head))
-          solveWithStack(goal, newQueue, head+1) // todo: TCO
+          solveWithQueue(goal, newQueue, head+1) // todo: TCO
         }
       }
     }
