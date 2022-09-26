@@ -1,6 +1,5 @@
 import Graph.{Node, Graph, Edgemap}
 
-
 // abstraction of puzzle state
 case class State(b1: Node, b2: Node, dog: Node) {
   def moveBunny1(n: Node): State = State(n, b2, dog)    
