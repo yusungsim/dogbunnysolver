@@ -1,4 +1,3 @@
-import scala.annotation.tailrec
 import Graph.{Node, Graph, Edgemap}
 
 
