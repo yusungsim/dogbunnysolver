@@ -1,4 +1,4 @@
-package Graph
+package graph
 
 // Abstraction of general graph
 case class Node(name: String)
